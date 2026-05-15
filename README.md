@@ -8,6 +8,17 @@ This quiz is developed as a desktop program, utilising [Python](https://python.o
 
 ## Design
 ### GUI Designs
+**Figure 1** shows the early protoype which was used during the initial design stage of the program. It represents the basic user journey from the starting screen, to a single question (as an example) to the finish screen highlighting the weak areas.
+
+It contains some basic colour highlighting to showcase the idea clearly, however this is not intended to perfectly represent the end application.
+
+![Figure 1: Early prototype](docs/prototype_1.png)
+**Figure 1**
+
+**Figure 2** shows the journey related to planned validation requirements and error messages on the name input fields. These ensure that the user enters a valid name before proceeding to the questions
+
+![Figure 2: Validation requirements](docs/prototype_2.png)
+**Figure 2**
 ### Requirements
 #### Functional requirements
 #### Non-funcational requirements
