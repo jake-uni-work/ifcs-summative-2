@@ -9,4 +9,4 @@ WINDOW_MIN_HEIGHT=WINDOW_INIT_HEIGHT
 
 
 def font(size=20, bold=False):
-    return ("Inter", size) if not bold else ("Inter", 20, "bold")
+    return ("Arial", size) if not bold else ("Arial", size, "bold")
