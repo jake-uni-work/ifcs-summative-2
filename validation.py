@@ -1,14 +1,7 @@
 import re
 
 # This Regex will match 
-VALID_NAME_RE = re.compile(r"^[a-zA-Z\-' ]+$")
-
-def validate_name(name: str) -> bool:
-    """
-    Checks whether a name is a valid name for the application.    
-    """
-    return bool(name) and validate_name_length(name) and validate_name_characters(name)
-    
+VALID_NAME_RE = re.compile(r"^[a-zA-Z\-' ]+$")    
     
 def validate_name_length(name: str) -> bool:
     """Checks whether the provided name is a valid length, which is between 3 and 50 characters long"""

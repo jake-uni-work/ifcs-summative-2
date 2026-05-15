@@ -6,3 +6,7 @@ WINDOW_INIT_HEIGHT=480
 
 WINDOW_MIN_WIDTH=WINDOW_INIT_WIDTH
 WINDOW_MIN_HEIGHT=WINDOW_INIT_HEIGHT
+
+
+def font(size=20, bold=False):
+    return ("Inter", size) if not bold else ("Inter", 20, "bold")
