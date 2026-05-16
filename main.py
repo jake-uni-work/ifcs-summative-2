@@ -7,10 +7,9 @@ from constants import *
 from validation import *
 from question_loader import *
 
-# TODO: extract into own file?
-
 
 class WelcomeScreen(tk.Frame):
+    """The initial welcome screen which asks a player for their name, validates it, and then asks the first question"""
     def __init__(self, parent: "QuizApp"):
         self.parent = parent
         super().__init__(parent, bg=WINDOW_BG_COLOUR)
@@ -69,10 +68,12 @@ class WelcomeScreen(tk.Frame):
                 message="Name must contain only letters, spaces, hyphens, and apostraphes."
             )
         else:
+            self.parent.name = entered_name
             self.parent.draw_question(1)
 
 
 class QuestionView(tk.Frame):
+    """Displays a singular question"""
     def __init__(self, parent: "QuizApp", question_number: int) -> None:
         super().__init__(
             parent,
@@ -81,12 +82,14 @@ class QuestionView(tk.Frame):
         self.parent = parent
         self.question_number = question_number
         self.question = self.parent.questions[self.question_number - 1]
-        self.answer_buttons = {}
+        self.answer_buttons: dict[str, tk.Button] = {}
+        self.score_label = None
         self.draw_header()
         self.draw_question()
         self.draw_answers()
 
     def draw_header(self):
+        """Draws the header of the window containing the question number and the score"""
         header_frame = tk.Frame(
             self,
             bg=WINDOW_BG_COLOUR
@@ -103,15 +106,16 @@ class QuestionView(tk.Frame):
         )
         question_num_label.pack(anchor="nw", side="left")
 
-        score_label = tk.Label(
+        self.score_label = tk.Label(
             header_frame,
-            text="Score: 0/0",
+            text=f"Score: {self.parent.score}/{self.question_number - 1}",
             font=font(25),
             bg=WINDOW_BG_COLOUR
         )
-        score_label.pack(anchor="ne", side="right")
+        self.score_label.pack(anchor="ne", side="right")
 
     def draw_question(self):
+        """Draws the actual question text"""
         question_text_label = tk.Label(
             self,
             text=self.question['question'],
@@ -123,16 +127,60 @@ class QuestionView(tk.Frame):
         question_text_label.pack(fill="x", pady=(0, 20))
 
         # Automatically update the text wrap size when the window is resized
-        self.bind('<Configure>', lambda e: question_text_label.configure(wraplength=self.winfo_width()))
+        self.bind('<Configure>', lambda _: question_text_label.configure(wraplength=self.winfo_width()))
 
     def draw_answers(self):
+        """Draws the answer buttons"""
         for option in ("a", "b", "c", "d"):
             answer_button = tk.Button(self, text=f"{option.upper()}: {self.question['options'][option]}", font=font(20), width=35, command=partial(self.on_answer_click, option))
             answer_button.pack(pady=(0, 20))
             self.answer_buttons[option] = answer_button
 
-    def on_answer_click(self, option):
-        messagebox.showinfo(title="Answer", message=f"You clicked {option}")
+    def on_answer_click(self, option: str) -> None:
+        """
+        Callback when any answer button is clicked.
+        
+        This function will check whether the answer is correct, and update the UI accordingly.
+        
+        Args:
+            option: the option that is clicked
+                    
+        """
+        for btn in self.answer_buttons.values():
+            btn.configure(state="disabled", command=lambda: ...)
+            
+        
+        if self.question['category']:
+            if self.question['category'] not in self.parent.score_by_category:
+                self.parent.score_by_category[self.question['category']] = {"score": 0, "questions": 0}
+        self.parent.score_by_category[self.question['category']]['questions'] += 1
+        
+        # TODO: extract answer checking logic from UI update logic to ensure it can be tested
+        correct = self.question['correct']
+        if option == correct:
+            self.answer_buttons[option].configure(bg="green", disabledforeground="black")
+            self.parent.score += 1
+            if self.question['category']:
+                self.parent.score_by_category[self.question['category']]['score'] += 1
+        else:
+            self.answer_buttons[option].configure(bg="red", disabledforeground="black")
+            self.answer_buttons[correct].configure(bg="green", disabledforeground="black")
+            
+        if self.score_label:
+            self.score_label.configure(text=f"Score: {self.parent.score}/{self.question_number}")
+            
+        next_question_button = tk.Button(
+            self,
+            width=8,
+            height=2,
+            text="Next\nQuestion",
+            font=font(20),
+            command=self.draw_next_question
+        )
+        next_question_button.pack(pady=(0, 0))
+        
+    def draw_next_question(self):
+        self.parent.draw_question(self.question_number + 1)
 
 
 class QuizApp(tk.Tk):
@@ -145,10 +193,12 @@ class QuizApp(tk.Tk):
         self.active_container: Optional[tk.Frame] = None
         self.questions = load_questions("questions.csv")
         self.draw_welcome_screen()
+        self.score: int = 0
+        self.score_by_category: dict[str, dict[str, int]] = {}
+        self.name: Optional[str] = None
 
     def draw_welcome_screen(self) -> None:
         self.clear_screen()
-        # TODO: extract into own class
         self.active_container = WelcomeScreen(self)
         self.active_container.pack(expand=True, fill="both")
 
