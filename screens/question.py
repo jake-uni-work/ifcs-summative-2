@@ -69,7 +69,9 @@ class QuestionView(tk.Frame):
     def draw_answers(self):
         """Draws the answer buttons"""
         for option in ("a", "b", "c", "d"):
-            answer_button = tk.Button(self, text=f"{option.upper()}: {self.question['options'][option]}", font=font(20), width=35, command=partial(self.on_answer_click, option))
+            # Using a lambda function here causes the option to always be "d", so use a functools partial instead which does work properly
+            command = partial(self.on_answer_click, option)
+            answer_button = tk.Button(self, text=f"{option.upper()}: {self.question['options'][option]}", font=font(20), width=35, command=command)
             answer_button.pack(pady=(0, 20))
             self.answer_buttons[option] = answer_button
 
