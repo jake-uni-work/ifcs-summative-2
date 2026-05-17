@@ -168,7 +168,7 @@ class QuestionView(tk.Frame):
             self,
             width=8,
             height=2,
-            text="Finish\nQuiuz" if self.question_number >= len(self.parent.questions) else "Next\nQuestion",
+            text="Finish\nQuiz" if self.question_number >= len(self.parent.questions) else "Next\nQuestion",
             font=font(20),
             command=self.draw_next_question
         )
