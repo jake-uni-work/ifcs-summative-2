@@ -150,21 +150,16 @@ class QuestionView(tk.Frame):
             btn.configure(state="disabled", command=lambda: ...)
             
         
-        if self.question['category']:
-            if self.question['category'] not in self.parent.score_by_category:
-                self.parent.score_by_category[self.question['category']] = {"score": 0, "questions": 0}
-        self.parent.score_by_category[self.question['category']]['questions'] += 1
-        
         # TODO: extract answer checking logic from UI update logic to ensure it can be tested
         correct = self.question['correct']
         if option == correct:
             self.answer_buttons[option].configure(bg="green", disabledforeground="black")
             self.parent.score += 1
-            if self.question['category']:
-                self.parent.score_by_category[self.question['category']]['score'] += 1
+            self.parent.score_by_answer[self.question_number] = 1
         else:
             self.answer_buttons[option].configure(bg="red", disabledforeground="black")
             self.answer_buttons[correct].configure(bg="green", disabledforeground="black")
+            self.parent.score_by_answer[self.question_number] = 1
             
         if self.score_label:
             self.score_label.configure(text=f"Score: {self.parent.score}/{self.question_number}")
@@ -173,14 +168,23 @@ class QuestionView(tk.Frame):
             self,
             width=8,
             height=2,
-            text="Next\nQuestion",
+            text="Finish\nQuiuz" if self.question_number >= len(self.parent.questions) else "Next\nQuestion",
             font=font(20),
             command=self.draw_next_question
         )
         next_question_button.pack(pady=(0, 0))
         
     def draw_next_question(self):
-        self.parent.draw_question(self.question_number + 1)
+        if self.question_number >= len(self.parent.questions):
+            self.parent.draw_end_screen()
+        else:
+            self.parent.draw_question(self.question_number + 1)
+
+
+class EndScreen(tk.Frame):
+    def __init__(self, parent: "QuizApp"):
+        super().__init__(parent, bg=WINDOW_BG_COLOUR)
+        
 
 
 class QuizApp(tk.Tk):
@@ -194,7 +198,8 @@ class QuizApp(tk.Tk):
         self.questions = load_questions("questions.csv")
         self.draw_welcome_screen()
         self.score: int = 0
-        self.score_by_category: dict[str, dict[str, int]] = {}
+        # TODO: store in a list instead
+        self.score_by_answer: dict[int, int] = {}
         self.name: Optional[str] = None
 
     def draw_welcome_screen(self) -> None:
@@ -205,6 +210,11 @@ class QuizApp(tk.Tk):
     def draw_question(self, question_number: int):
         self.clear_screen()
         self.active_container = QuestionView(self, question_number)
+        self.active_container.pack(expand=True, fill="both")
+        
+    def draw_end_screen(self):
+        self.clear_screen()
+        self.active_container = EndScreen(self)
         self.active_container.pack(expand=True, fill="both")
 
     def clear_screen(self):
