@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class QuestionView(tk.Frame):
     """Displays a singular question"""
-    def __init__(self, parent: QuizApp, question_number: int) -> None:
+    def __init__(self, parent: "QuizApp", question_number: int) -> None:
         super().__init__(
             parent,
             bg=WINDOW_BG_COLOUR

@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 class WelcomeScreen(tk.Frame):
     """The initial welcome screen which asks a player for their name, validates it, and then asks the first question"""
 
-    def __init__(self, parent: QuizApp):
+    def __init__(self, parent: "QuizApp"):
         self.parent = parent
         super().__init__(parent, bg=WINDOW_BG_COLOUR)
         welcome_label = tk.Label(

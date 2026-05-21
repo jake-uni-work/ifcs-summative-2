@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from main import QuizApp
 
 class EndScreen(tk.Frame):
-    def __init__(self, parent: QuizApp):
+    def __init__(self, parent: "QuizApp"):
         super().__init__(parent, bg=WINDOW_BG_COLOUR)
         header_label = tk.Label(self, text="Your results", font=font(30), bg=WINDOW_BG_COLOUR, fg=TEXT_FG_COLOUR)
         header_label.pack(pady=(20, 0))
