@@ -94,11 +94,11 @@ class QuestionView(tk.Frame):
         if option == correct:
             self.answer_buttons[option].configure(bg="green", disabledforeground="black")
             self.parent.score += 1
-            self.parent.score_by_answer[self.question_number] = 1
+            self.parent.score_by_question[self.question_number] = 1
         else:
             self.answer_buttons[option].configure(bg="red", disabledforeground="black")
             self.answer_buttons[correct].configure(bg="green", disabledforeground="black")
-            self.parent.score_by_answer[self.question_number] = 0
+            self.parent.score_by_question[self.question_number] = 0
             
         if self.score_label:
             self.score_label.configure(text=f"Score: {self.parent.score}/{self.question_number}")

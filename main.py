@@ -15,7 +15,7 @@ class QuizApp(tk.Tk):
         self.questions = load_questions("questions.csv")
         self.score: int = 0
         # TODO: store in a list instead
-        self.score_by_answer: dict[int, int] = {}
+        self.score_by_question: dict[int, int] = {}
         
         self.config(bg=WINDOW_BG_COLOUR)
         self.minsize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
