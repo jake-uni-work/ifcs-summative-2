@@ -23,10 +23,13 @@ It contains some basic colour highlighting to showcase the idea clearly, however
 #### Functional requirements
 #### Non-funcational requirements
 ### Tech Stack Outline
-TODO
+The following software and libraries are used in the creation and operation of this program
 - [Python 3](https://python.org) is the programming language used
 - [Tkinter](https://docs.python.org/3/library/tkinter.html) is the GUI library used
 - [unittest](https://docs.python.org/3/library/unittest.html) for automated unit testing
+- [typing](https://docs.python.org/3/library/typing.html) for type hinting
+- [re](https://docs.python.org/3/library/re.html) for regular expression parsing
+- [datetime](https://docs.python.org/3/library/datetime.html) for date and time handling
 
 ### Code Design
 **Figure 3** shows the class diagram of the codebase. The [raw DrawIO file](docs/Class%20Diagram.drawio) is also available in the `docs/` folder.
