@@ -36,7 +36,7 @@ class QuizApp(tk.Tk):
         
     def draw_end_screen(self):
         self.clear_screen()
-        self.active_container = screens.EndScreen(self)
+        self.active_container = screens.EndView(self)
         self.active_container.pack(expand=True, fill="both")
 
     def clear_screen(self):

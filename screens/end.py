@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from main import QuizApp
 
 
-class EndScreen(tk.Frame):
+class EndView(tk.Frame):
     def __init__(self, parent: "QuizApp"):
         super().__init__(parent, bg=WINDOW_BG_COLOUR)
         self.parent = parent
