@@ -29,6 +29,11 @@ TODO
 - [unittest](https://docs.python.org/3/library/unittest.html) for automated unit testing
 
 ### Code Design
+**Figure 3** shows the class diagram of the codebase. The [raw DrawIO file](docs/Class%20Diagram.drawio) is also available in the `docs/` folder.
+
+TODO: fix tk.Tk
+![Figure 3: Class diagram](docs/Class%20Diagram.drawio.png)
+**Figure 3**
 ## Development
 ## Testing
 ## Documentation
