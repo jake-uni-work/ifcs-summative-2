@@ -88,7 +88,7 @@ class QuestionView(tk.Frame):
         for btn in self.answer_buttons.values():
             btn.configure(state="disabled", command=lambda: ...)
             
-        
+        self.parent.answer_by_question[self.question_number] = option
         # TODO: extract answer checking logic from UI update logic to ensure it can be tested
         correct = self.question['correct']
         if option == correct:

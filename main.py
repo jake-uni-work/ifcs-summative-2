@@ -1,5 +1,6 @@
 import tkinter as tk
 from typing import Optional
+from datetime import datetime
 
 from constants import *
 from validation import *
@@ -12,10 +13,11 @@ class QuizApp(tk.Tk):
         super().__init__()
         self.name: Optional[str] = None
         self.active_container: Optional[tk.Frame] = None
-        self.questions = load_questions("questions.csv")
+        self.questions: list[dict] = load_questions("questions.csv")
         self.score: int = 0
         # TODO: store in a list instead
         self.score_by_question: dict[int, int] = {}
+        self.answer_by_question: dict[int, str] = {}
         
         self.config(bg=WINDOW_BG_COLOUR)
         self.minsize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
@@ -36,8 +38,25 @@ class QuizApp(tk.Tk):
         
     def draw_end_screen(self):
         self.clear_screen()
+        self.save_results()
         self.active_container = screens.EndView(self)
         self.active_container.pack(expand=True, fill="both")
+        
+    def save_results(self):
+        # TODO move
+        file_name = "results.csv" 
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        answers: list[str] = []
+        
+        # TODO: must be a list not a dict this is really ugly
+        for key in sorted(self.answer_by_question.keys()):
+            answers.append(self.answer_by_question[key])
+            
+        with open(file_name, 'a', newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow([now, self.name, answers])
+            
+        
 
     def clear_screen(self):
         if self.active_container:
