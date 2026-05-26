@@ -21,44 +21,50 @@ class EndView(tk.Frame):
         score_label.pack(pady=(20, 0))
 
         strongest, weakest = self.calculate_categories()
+        if strongest:
+            strongest_label = tk.Label(
+                self, text=f"Your strongest categories were:", font=font(25), bg=WINDOW_BG_COLOUR, fg=TEXT_FG_COLOUR
+            )
+            strongest_label.pack(pady=(20, 0))
 
-        strongest_label = tk.Label(
-            self, text=f"Your strongest categories were:", font=font(25), bg=WINDOW_BG_COLOUR, fg=TEXT_FG_COLOUR
-        )
-        strongest_label.pack(pady=(20, 0))
+            strongest_3_text_label = tk.Label(
+                self, text=", ".join(strongest), font=font(20), bg=WINDOW_BG_COLOUR, fg=TEXT_FG_COLOUR
+            )
+            strongest_3_text_label.pack(pady=(0, 20))
+        if weakest:
+            weakest_3_label = tk.Label(
+                self, text=f"Your weakest categories were:", font=font(25), bg=WINDOW_BG_COLOUR, fg=TEXT_FG_COLOUR
+            )
+            weakest_3_label.pack(pady=(20, 0))
 
-        strongest_3_text_label = tk.Label(
-            self, text=", ".join(strongest), font=font(20), bg=WINDOW_BG_COLOUR, fg=TEXT_FG_COLOUR
-        )
-        strongest_3_text_label.pack(pady=(0, 20))
-
-        weakest_3_label = tk.Label(
-            self, text=f"Your weakest categories were:", font=font(25), bg=WINDOW_BG_COLOUR, fg=TEXT_FG_COLOUR
-        )
-        weakest_3_label.pack(pady=(20, 0))
-
-        weakest_3_text_label = tk.Label(
-            self, text=", ".join(weakest), font=font(20), bg=WINDOW_BG_COLOUR, fg=TEXT_FG_COLOUR
-        )
-        weakest_3_text_label.pack(pady=(0, 20))
+            weakest_3_text_label = tk.Label(
+                self, text=", ".join(weakest), font=font(20), bg=WINDOW_BG_COLOUR, fg=TEXT_FG_COLOUR
+            )
+            weakest_3_text_label.pack(pady=(0, 20))
 
     def calculate_categories(self):
-        return strongest_and_weakest_by_category(calculate_categories(self.parent.questions, self.parent.score_by_question))
+        return strongest_and_weakest_categories(calculate_categories(self.parent.questions, self.parent.score_by_question))
 
 
 def determine_count(categories: int) -> int:
-    if 0 <= categories <= 3:
+    if categories < 2:
+        return 0
+    elif categories < 4:
         return 1
-    elif 4 <= categories < 8:
+    elif categories < 8:
         return 2
     else:
         return 3
 
 
-def strongest_and_weakest_by_category(score_by_category: dict[str, int]):
+def strongest_and_weakest_categories(score_by_category: dict[str, int]) -> tuple[list[str], list[str]]:
+    count = determine_count(len(score_by_category))
+
+    if count == 0:
+        return ([], [])
+
     sorted_list = [tuple_[0] for tuple_ in sorted(
         [(category, score) for category, score in score_by_category.items()], key=lambda tuple_: tuple_[1])]
-    count = determine_count(len(score_by_category))
     if count == 1:
         strongest = [sorted_list[-1]]
         weakest = [sorted_list[0]]

@@ -1,11 +1,13 @@
 import unittest
 
-from screens.end import calculate_categories, determine_count, strongest_and_weakest_by_category
+from screens.end import calculate_categories, determine_count, strongest_and_weakest_categories
 
 
 class CategoryCalcTest(unittest.TestCase):
     def test_category_count(self):
-        for i in range(1, 4):
+        self.assertEqual(determine_count(0), 0)
+        self.assertEqual(determine_count(1), 0)
+        for i in range(2, 4):
             self.assertEqual(determine_count(i), 1)
         for i in range(4, 8):
             self.assertEqual(determine_count(i), 2)
@@ -25,7 +27,7 @@ class CategoryCalcTest(unittest.TestCase):
             "Test8": 0,
         }
             
-        strongest, weakest = strongest_and_weakest_by_category(scores)
+        strongest, weakest = strongest_and_weakest_categories(scores)
         
         self.assertEqual(weakest, ["Test8", "Test1", "Test4"])
         self.assertEqual(strongest, ["Test6", "Test5", "Test2"])
