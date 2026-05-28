@@ -50,12 +50,11 @@ Due to the nature of Tkinter as a framework, this project is heavily object-orie
 
 TODO: fix tk.Tk
 ![Figure 3: Class diagram](docs/Class%20Diagram.drawio.png)
+**Figure 3**
 
 There is a central (or "root") class `QuizApp` which defines the main window and holds most of the state. This class inherits `tk.Tk`.
 
 Each individual view is its own class inherting the `tk.Frame` class. This aids in splitting up the project into different classes for different functions so it becomes a lot clearer which view is resposnible for which UI elements and the flow between them.
-
-**Figure 3**
 ## Development
 ## Testing
 Both automated and manual testing was used and performed throughout the development process.
