@@ -60,8 +60,6 @@ class QuizApp(tk.Tk):
 
     def clear_screen(self):
         if self.active_container:
-            for elem in self.active_container.winfo_children():
-                elem.destroy()
             self.active_container.destroy()
             self.active_container = None
         else:
