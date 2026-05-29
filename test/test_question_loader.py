@@ -1,5 +1,6 @@
 import unittest
-from question_loader import load_questions, validate_row
+from question_loader import load_questions
+from validation import validate_question
 
 class QuestionLoaderTests(unittest.TestCase):
     def test_load_questions(self):
@@ -30,7 +31,7 @@ class QuestionLoaderTests(unittest.TestCase):
         }
         
         with self.assertRaisesRegex(ValueError, "Question is missing the question"):
-            validate_row(data)
+            validate_question(data)
             
     def test_missing_option_a(self):
         data = {
@@ -42,7 +43,7 @@ class QuestionLoaderTests(unittest.TestCase):
         }
         
         with self.assertRaisesRegex(ValueError, "Question is missing option A"):
-            validate_row(data)
+            validate_question(data)
             
     def test_missing_option_b(self):
         data = {
@@ -54,7 +55,7 @@ class QuestionLoaderTests(unittest.TestCase):
         }
         
         with self.assertRaisesRegex(ValueError, "Question is missing option B"):
-            validate_row(data)
+            validate_question(data)
             
     def test_missing_option_c(self):
         data = {
@@ -66,7 +67,7 @@ class QuestionLoaderTests(unittest.TestCase):
         }
         
         with self.assertRaisesRegex(ValueError, "Question is missing option C"):
-            validate_row(data)
+            validate_question(data)
             
     def test_missing_option_d(self):
         data = {
@@ -78,7 +79,7 @@ class QuestionLoaderTests(unittest.TestCase):
         }
         
         with self.assertRaisesRegex(ValueError, "Question is missing option D"):
-            validate_row(data)
+            validate_question(data)
     
     def test_correct_valid(self):
         data = {
@@ -90,5 +91,5 @@ class QuestionLoaderTests(unittest.TestCase):
             "correct": 1
         }
         with self.assertRaisesRegex(ValueError, "Correct answer must be a, b, c or d"):
-            validate_row(data)
+            validate_question(data)
         
