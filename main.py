@@ -29,16 +29,19 @@ class QuizApp(tk.Tk):
         self.draw_welcome_screen()
 
     def draw_welcome_screen(self) -> None:
+        """Clears the current view and displays the welcome screen"""
         self.clear_screen()
         self.active_container = screens.WelcomeScreen(self)
         self.active_container.pack(expand=True, fill="both")
 
     def draw_question(self, question_number: int):
+        """Clears the current view and displays the provided question number"""
         self.clear_screen()
         self.active_container = screens.QuestionView(self, question_number)
         self.active_container.pack(expand=True, fill="both")
 
     def draw_end_screen(self):
+        """Clears the current view and displays the ending screen, showing the results"""
         self.clear_screen()
         self.save_results()
         self.active_container = screens.EndView(self)
