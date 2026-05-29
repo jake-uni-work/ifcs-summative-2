@@ -13,11 +13,13 @@ This quiz is developed as a desktop program, utilising [Python](https://python.o
 It contains some basic colour highlighting to showcase the idea clearly, however this is not intended to perfectly represent the end application.
 
 ![Figure 1: Early prototype](docs/prototype_1.png)
+
 **Figure 1**
 
 **Figure 2** shows the journey related to planned validation requirements and error messages on the name input fields. These ensure that the user enters a valid name before proceeding to the questions
 
 ![Figure 2: Validation requirements](docs/prototype_2.png)
+
 **Figure 2**
 ### Requirements
 #### Functional requirements
@@ -49,20 +51,106 @@ The following software and libraries are used in the creation and operation of t
 Due to the nature of Tkinter as a framework, this project is heavily object-oriented. **Figure 3** shows the class diagram of the codebase. The [raw DrawIO file](docs/Class%20Diagram.drawio) is also available in the `docs/` folder.
 
 TODO: fix tk.Tk
-![Figure 3: Class diagram](docs/Class%20Diagram.drawio.png)
-**Figure 3**
 
+![Figure 3: Class diagram](docs/Class%20Diagram.drawio.png)
+
+**Figure 3**
+## Development
+### The different "states"
 There is a central (or "root") class `QuizApp` which defines the main window and holds most of the state. This class inherits `tk.Tk`.
 
-Each individual view is its own class inherting the `tk.Frame` class. This aids in splitting up the project into different classes for different functions so it becomes a lot clearer which view is resposnible for which UI elements and the flow between them.
-## Development
+Each individual view is its own class inherting the `tk.Frame` class. This aids in splitting up the project into different classes for different functions so it becomes a lot clearer which view is responsible for which UI elements and the flow between them, and allows for the root class to only contain the necessary state and a few functions for shifting the view:
+```py
+def draw_welcome_screen(self) -> None:
+    """Clears the current view and displays the welcome screen"""
+    self.clear_screen()
+    self.active_container = screens.WelcomeScreen(self)
+    self.active_container.pack(expand=True, fill="both")
+
+def draw_question(self, question_number: int):
+    """Clears the current view and displays the provided question number"""
+    self.clear_screen()
+    self.active_container = screens.QuestionView(self, question_number)
+    self.active_container.pack(expand=True, fill="both")
+
+def draw_end_screen(self):
+    """Clears the current view and displays the ending screen, showing the results"""
+    self.clear_screen()
+    self.save_results()
+    self.active_container = screens.EndView(self)
+    self.active_container.pack(expand=True, fill="both")
+```
+
+### Question loading
+Questions are loaded from a CSV file and validated to ensure they contain all of the required data (i.e. must have a question, all the options, and which one is correct). A `ValueError` is raised if any of these rules are violated, and the program will exit immediately.
+
+From a flat dictionary the questions are formatted into our internal state:
+```py
+questions.append({
+    "question": row["question"],
+    "options": {
+        "a": row["option_a"].strip(),
+        "b": row["option_b"].strip(),
+        "c": row["option_c"].strip(),
+        "d": row["option_d"].strip()
+    },
+    "correct": row["correct"],
+    "category": row.get("category", None)
+})
+```
+
+### Validation
+When a user enters their name at the start of the quiz, it must be validated to ensure it is a reasonable name. These rules are:
+* Must be between 2-50 characters. To achive this, the length is checked: `return 2 <= len(name) <= 50`
+* Must contain only letters, spaces, hyphens and apostraphes. To achieve this, a Regular Expression (Regex) is used to validate the provided name against a set of rules.
+  * The Regex in question is `^[a-zA-Z\-' ]+$`, which will check that the entire string matches the pattern.
+    * `^` and `$` mean that the string must match the entire pattern.
+    * `a-z` matches all lowercase letters
+    * `A-Z` matches all uppercase letters
+    * `\-' ` matches `-`, `'` and a space literally
+    * `+` means match one or more characters
+
+If any of these rules fail, the name is refused and an error message is displayed to the user:
+```py
+if not entered_name:
+    messagebox.showerror(
+        title="Error",
+        message="You must enter a name."
+    )
+elif not validate_name_length(entered_name):
+    messagebox.showerror(
+        title="Error",
+        message="Name must be between 3 and 50 characters."
+    )
+elif not validate_name_characters(entered_name):
+    messagebox.showerror(
+        title="Error",
+        message="Name must contain only letters, spaces, hyphens, and apostraphes."
+    )
+else:
+    ...
+```
+
+### Asking the questions
+The `QuestionView` displays a singular question and all possible answers. Questions can be of varying length, however Tkinter provides a `wraplength` parameter on labels, which will instruct it to automatically wrap the text over multiple lines if it is too long to display.
+
+This parameter takes a fixed value, so it is set to `winfo_width` (the width of the frame). However, when the window is resized, by default the wrap size is not adjusted with the window and it will not re-wrap. In order to make it dynamic, we can attach a listener to the `<Configure>` in-built Tkinter event, which fires whenever the window is resized.
+```py
+self.bind('<Configure>', lambda _: question_text_label.configure(wraplength=self.winfo_width()))
+```
+This will then automatically adjust the text wrapping for the label so that it will adjust as the window resizes. **Figure 4** shows this in action:
+
+![Figure 4](docs/Resizing.gif)
+
+**Figure 4**
+
 ## Testing
 Both automated and manual testing was used and performed throughout the development process.
 
 Automated tests in the form of unit testing was added early on and run upon each commit, to ensure code functions across different platforms and to ensure future changes do not break existing functionality.
 The `Actions` tab contains the results of every run, and **Figure 4** shows the output of the unit testing:
 
-**TODO Figure 4**
+**TODO Figure 5**
 
 Manual testing was performed throughout the process to test UI interactions and flow as these are harder to test on a headless CI. This was testing that the required UI elements were visible and that the state changes via the buttons worked as intended.
 
@@ -97,7 +185,7 @@ In order to improve readability the project is split up into seperate files for 
   - `screens/end.py` contains the End screen, responsible for showing the final score and what categories were the strongest and weakest. It also (currently) contains the code to calculate the scores by category although this is pending being moved
 - `test/` contains the unit tests and sample question file used during the testing process
 - `question_loader.py` contains the loading code to load and parse questions
-- `validation.py` contains all validators for names
+- `validation.py` contains all validation functions (names and question loading)
 
 To run the unit tests:
 ```sh
