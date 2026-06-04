@@ -204,3 +204,8 @@ python -m unittest discover test
 ```
 
 ## Evaluation
+All in all, the development of this project went well, with the main requirements achieved. The program code flow is simple to understand and object-oriented. The validation requirements are covered by unit tests as is the loading and parsing flow. 
+
+Whenever I have done Tkinter based projects in the past I have always done the screens using a Frame for each screen as it allows for all of the behaviour of a specific screen to be contained within the class. One class contains logic for only one screen which makes troubleshooting significantly easier. I have again done this here which helped the development process along.
+
+In the future to expand the program, an idea would be to move towards a web based system. This would allow for the questions to be controlled centrally and would allow the results to be viewed from another system (provided appropriate authentication was used). I did experiment with [Streamlit](https://streamlit.io), however it did not quite meet the requirements for what I was trying to do. The ideal solution would be something utilising either [Flask](https://flask.palletsprojects.com), [Django](https://djangoproject.com) or [FastAPI](https://fastapi.tiangolo.com), however my limited knowledge of HTML/CSS would have made developing a properly functional frontend for these frameworks too much of a challenge at this stage.
