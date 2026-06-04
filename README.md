@@ -32,12 +32,12 @@ It contains some basic colour highlighting to showcase the idea clearly, however
 | FR5 | The application must save all attempts into some form of persistent storage (e.g. CSV file)                                  |
 | FR5 | The application should keep track of the score per question and output a summary based on the question categories at the end |
 #### Non-funcational requirements
-| ID   | Requirement                                                    |
-| ---- | -------------------------------------------------------------- |
-| NFR1 | The application should run as a standalone desktop application |
-| NFR2 | Stored data should be readable using standalone software       |
-| NFR3 |                                                                |
-| NFR4 |                                                                |
+| ID   | Requirement                                                                                               |
+| ---- | --------------------------------------------------------------------------------------------------------- |
+| NFR1 | The application should run as a standalone desktop application                                            |
+| NFR2 | Stored data should be readable using standalone software                                                  |
+| NFR3 | Text and background colours must have a 4.5:1 contrast ratio for all text to ensure readability for users |
+| NFR4 |                                                                                                           |
 ### Tech Stack Outline
 The following software and libraries are used in the creation and operation of this program
 - [Python 3](https://python.org) is the programming language used
@@ -84,7 +84,7 @@ def draw_end_screen(self):
 ### Question loading
 Questions are loaded from a CSV file and validated to ensure they contain all of the required data (i.e. must have a question, all the options, and which one is correct). A `ValueError` is raised if any of these rules are violated, and the program will exit immediately.
 
-From a flat dictionary the questions are formatted into our internal state:
+From a flat dictionary the questions are formatted into our internal state to make it easier to manage:
 ```py
 questions.append({
     "question": row["question"],
@@ -110,31 +110,37 @@ When a user enters their name at the start of the quiz, it must be validated to 
     * `\-' ` matches `-`, `'` and a space literally
     * `+` means match one or more characters
 
-If any of these rules fail, the name is refused and an error message is displayed to the user:
+If any of these rules fail, the name is refused and an error message is displayed to the user.
+
+If the user has not entered a name at all:
 ```py
 if not entered_name:
     messagebox.showerror(
         title="Error",
         message="You must enter a name."
     )
+```
+If the name entered is too short:
+```py
 elif not validate_name_length(entered_name):
     messagebox.showerror(
         title="Error",
         message="Name must be between 3 and 50 characters."
     )
+```
+If the name contains invalid characters:
+```py
 elif not validate_name_characters(entered_name):
     messagebox.showerror(
         title="Error",
         message="Name must contain only letters, spaces, hyphens, and apostraphes."
     )
-else:
-    ...
 ```
 
 ### Asking the questions
 The `QuestionView` displays a singular question and all possible answers. Questions can be of varying length, however Tkinter provides a `wraplength` parameter on labels, which will instruct it to automatically wrap the text over multiple lines if it is too long to display.
 
-This parameter takes a fixed value, so it is set to `winfo_width` (the width of the frame). However, when the window is resized, by default the wrap size is not adjusted with the window and it will not re-wrap. In order to make it dynamic, we can attach a listener to the `<Configure>` in-built Tkinter event, which fires whenever the window is resized.
+This parameter takes a fixed value, so on initialisation it is set to `winfo_width` (the width of the frame, which is pinned to the width of the window). However, when the window is resized, by default the wrap size is not adjusted with the window and it will not re-wrap. In order to make it dynamic, we can attach a listener to the `<Configure>` in-built Tkinter event, which fires whenever the window is resized (as the frame does resize automatically).
 ```py
 self.bind('<Configure>', lambda _: question_text_label.configure(wraplength=self.winfo_width()))
 ```
@@ -143,6 +149,11 @@ This will then automatically adjust the text wrapping for the label so that it w
 ![Figure 4](docs/Resizing.gif)
 
 **Figure 4**
+
+### Saving the results
+At the completion of the final question the results are saved to a CSV file called `results.csv`. It stores the players name, the time they completed the quiz, and the scores for each question. The results file does not currently store the per-category breakdown, this needs to be recalculated based on the question data. 
+
+These files are standared CSV files so can be viewed by standard spreadsheet software.
 
 ## Testing
 Both automated and manual testing was used and performed throughout the development process.
