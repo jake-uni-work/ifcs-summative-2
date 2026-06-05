@@ -30,9 +30,7 @@ def validate_question(row: dict) -> None:
     
     if "option_b" not in row:
         raise ValueError("Question is missing option B")
-    
-    # TODO: maybe have c and d be optional?
-    
+        
     if "option_c" not in row:
         raise ValueError("Question is missing option C")
     

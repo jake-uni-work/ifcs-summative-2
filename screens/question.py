@@ -115,7 +115,6 @@ class QuestionView(tk.Frame):
         
     def draw_next_question(self):
         """If this question is the last question, this will draw the end screen. Otherwise, it will draw the next question"""
-        # TODO: maybe move this logic into the QuizApp?
         if self.question_number >= len(self.parent.questions):
             self.parent.draw_end_screen()
         else:
