@@ -5,7 +5,7 @@ from datetime import datetime
 
 from constants import *
 from validation import *
-from question_loader import *
+from file_handler import *
 
 import screens
 
@@ -48,18 +48,11 @@ class QuizApp(tk.Tk):
         self.active_container.pack(expand=True, fill="both")
 
     def save_results(self):
-        # TODO move
-        file_name = "results.csv"
-        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        answers: list[str] = []
+        if self.name is None:
+            # this should never be called like this so an error can just be raised
+            raise ValueError("Cannot save results without a name")
 
-        # TODO: must be a list not a dict this is really ugly
-        for key in sorted(self.answer_by_question.keys()):
-            answers.append(self.answer_by_question[key])
-
-        with open(file_name, 'a', newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow([now, self.name, answers])
+        save_results("results.csv", self.name, self.answers)
 
     def clear_screen(self):
         if self.active_container:

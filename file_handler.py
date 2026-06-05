@@ -1,5 +1,7 @@
 import csv
+from datetime import datetime
 from validation import validate_question
+
 
 def load_questions(file_name: str) -> list[dict]:
     """Loads a set of questions from the provided CSV file"""
@@ -20,6 +22,15 @@ def load_questions(file_name: str) -> list[dict]:
                 "category": row.get("category", None)
             })
     return questions
+
+
+def save_results(file_name: str, name: str, answers: list[str]):
+    """Saves the results of a quiz to a CSV file, appending to the end of the file if it already exists"""
+    file_name = "results.csv"
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(file_name, 'a', newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow([now, name, answers])
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 import unittest
-from question_loader import load_questions
+from file_handler import load_questions
 from validation import validate_question
 
 class QuestionLoaderTests(unittest.TestCase):
