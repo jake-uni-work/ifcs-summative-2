@@ -43,7 +43,7 @@ class EndView(tk.Frame):
             weakest_3_text_label.pack(pady=(0, 20))
 
     def calculate_categories(self):
-        return strongest_and_weakest_categories(calculate_categories(self.parent.questions, self.parent.score_by_question))
+        return strongest_and_weakest_categories(calculate_categories(self.parent.questions, self.parent.scores))
 
 
 def determine_count(categories: int) -> int:
@@ -75,14 +75,13 @@ def strongest_and_weakest_categories(score_by_category: dict[str, int]) -> tuple
     return (strongest, weakest)
 
 
-def calculate_categories(questions: list[dict], scores: dict[int, int]):
+def calculate_categories(questions: list[dict], scores: list[int]) -> dict[str, int]:
     score_by_category: dict[str, int] = {}
     for idx, question in enumerate(questions):
-        question_number = idx + 1
         category = question.get("category", None)
         if category:
             score_by_category.setdefault(category, 0)
-            if scores[question_number] > 0:
+            if scores[idx] > 0: 
                 score_by_category[category] += 1
 
     return score_by_category

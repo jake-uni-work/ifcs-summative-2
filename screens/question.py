@@ -88,18 +88,18 @@ class QuestionView(tk.Frame):
         for btn in self.answer_buttons.values():
             btn.configure(state="disabled", command=lambda: ...)
             
-        self.parent.answer_by_question[self.question_number] = option
+        self.parent.answers.append(option)
         # TODO: extract answer checking logic from UI update logic to ensure it can be tested
         correct = self.question['correct']
         if option == correct:
             self.answer_buttons[option].configure(bg="green", disabledforeground="black")
             self.parent.score += 1
-            self.parent.score_by_question[self.question_number] = 1
+            self.parent.scores.append(1)
         else:
             self.answer_buttons[option].configure(bg="red", disabledforeground="black")
             self.answer_buttons[correct].configure(bg="green", disabledforeground="black")
-            self.parent.score_by_question[self.question_number] = 0
-            
+            self.parent.scores.append(0)
+
         if self.score_label:
             self.score_label.configure(text=f"Score: {self.parent.score}/{self.question_number}")
             

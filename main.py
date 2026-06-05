@@ -18,13 +18,13 @@ class QuizApp(tk.Tk):
         self.questions: list[dict] = load_questions(question_file_name)
         self.score: int = 0
         # TODO: store in a list instead
-        self.score_by_question: dict[int, int] = {}
-        self.answer_by_question: dict[int, str] = {}
+        self.scores: list[int] = []
+        self.answers: list[str] = []
 
         self.config(bg=WINDOW_BG_COLOUR)
         self.minsize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
         self.geometry(f"{WINDOW_INIT_WIDTH}x{WINDOW_INIT_HEIGHT}")
-        self.title("Quiz")  # TODO: final name
+        self.title("Quiz")
 
         self.draw_welcome_screen()
 
@@ -65,7 +65,6 @@ class QuizApp(tk.Tk):
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        # TODO: proper error handling
         root = QuizApp(sys.argv[1])
     else:
         root = QuizApp()
