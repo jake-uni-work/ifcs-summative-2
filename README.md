@@ -191,7 +191,7 @@ A summary table for non-functional requirements
 | NFR1  |  Yes   | Runs as a Tkinter program                                                                                                                                                                            |
 | NFR2  |  Yes   | Does not use any libraries outside of the standard Python library set which is supported on all devices                                                                                              |
 | NFR3  |  Yes   | Uses CSV files which are readable by any software                                                                                                                                                    |
-| NFR4  |  Yes   |                                                                                                                                                                                                      |
+| NFR4  |  Yes   | The colours used have a ratio of 7.8:1                                                                                                                                                               |
 | NFR5  |  Yes   | Error messages are documented above and use clear language. Internal error messages (upon question load fail) are not intended to be seen by the end user and are out of scope for this requirement. |
 
 ## Documentation
