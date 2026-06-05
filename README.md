@@ -1,10 +1,17 @@
 # Quiz
 ## Introduction
-The [app name] app is a Minimum Viable Product (MVP) developed for our workplace, a company providing managed IT services. 
+The Quiz app is a Minimum Viable Product (MVP) developed for our workplace, a company providing managed IT services. 
 
-As part of our onboarding, the organisation requires a method of testing new support agents' knowledge to identify any gaps in existing skills to focus training in the appropriate areas. This quiz implements a category system so that upon completion of the quiz it is possible to see the strongest and weakest areas to enable said focused training.
+As part of our onboarding, the organisation requires a method of testing new support agents' knowledge to identify gaps in existing skills to focus training in the appropriate areas. It implements a category system so that upon completion, it is possible to see the strongest and weakest areas to enable the focused training
 
-This quiz is developed as a desktop program, utilising [Python](https://python.org) and [Tkinter](https://docs.python.org/3/library/tkinter.html). 
+This quiz is developed as a desktop program, utilising [Python](https://python.org) and [Tkinter](https://docs.python.org/3/library/tkinter.html). It collects a participants name and the answers to a set of configurable multiple choice questions spread over various categories.
+
+Before the participant is allowed to take the quiz, the name is validated against a set of rules. If any of these rules fail, the name is refused and the participant must re-enter a valid name before continuing. This ensures that stored records are suitable for later review.
+After the name is entered, a set of multiple choice questions (which are provided in a CSV file) are asked to the participant, and their answers are recorded. Immediate feedback is provided as to whether the answer selected was correct or not, and if the answer was not correct, the correct answer is displayed to the participant.
+
+At the end of the quiz, a summary is shown to the user and their score is saved into a CSV file. This storage format allows the results table to be opened by standard spreadsheet software (e.g. Microsoft Excel and Google Sheets) and to be analysed using traditional graphing tooling for users unfamiliar with the specifics of this quiz app.
+
+This MVP focuses on essential functionality (displaying questions and providing answer feedback, a score, and per-category breakdown). Features such as a results viewer, question editor, and authentication are out of scope for this MVP. Due to the modular nature of this app, it is designed to be relatively easy to add these features in the future.
 
 ## Design
 ### GUI Designs
@@ -30,14 +37,16 @@ It contains some basic colour highlighting to showcase the idea clearly, however
 | FR3 | The application must show a single question at a time and all possible answers                                               |
 | FR4 | The application must load all questions from a persistent file and not contain any hard coded questions outside of tests     |
 | FR5 | The application must save all attempts into some form of persistent storage (e.g. CSV file)                                  |
-| FR5 | The application should keep track of the score per question and output a summary based on the question categories at the end |
+| FR6 | The application should keep track of the score per question and output a summary based on the question categories at the end |
+
 #### Non-funcational requirements
 | ID   | Requirement                                                                                               |
 | ---- | --------------------------------------------------------------------------------------------------------- |
 | NFR1 | The application should run as a standalone desktop application                                            |
-| NFR2 | Stored data should be readable using standalone software                                                  |
-| NFR3 | Text and background colours must have a 4.5:1 contrast ratio for all text to ensure readability for users |
-| NFR4 |                                                                                                           |
+| NFR2 | The application should run on any device that supports Python                                             |
+| NFR3 | Stored data should be readable using standalone software                                                  |
+| NFR4 | Text and background colours must have a 4.5:1 contrast ratio for all text to ensure readability for users |
+| NFR5 | Error messages displayed must be non-technical and easy to understand for all users                       |
 ### Tech Stack Outline
 The following software and libraries are used in the creation and operation of this program
 - [Python 3](https://python.org) is the programming language used
@@ -159,15 +168,33 @@ These files are standared CSV files so can be viewed by standard spreadsheet sof
 Both automated and manual testing was used and performed throughout the development process.
 
 Automated tests in the form of unit testing was added early on and run upon each commit, to ensure code functions across different platforms and to ensure future changes do not break existing functionality.
-The `Actions` tab contains the results of every run, and **Figure 4** shows the output of the unit testing:
+The `Actions` tab contains the results of every run, and **Figure 5** shows the output of the unit testing:
 
-**TODO Figure 5**
+![Figure 5](docs/tests.png)
+
+**Figure 5**
 
 Manual testing was performed throughout the process to test UI interactions and flow as these are harder to test on a headless CI. This was testing that the required UI elements were visible and that the state changes via the buttons worked as intended.
 
-A summary table of manual tests against the functional and non-functional requirements are below:
+A summary table of manual tests against the functional requirements are below:
 
+| Requirement | Passed | Evidence                                                                 |
+| :---------: | :----: | ------------------------------------------------------------------------ |
+|     FR1     |  Yes   | ![FR1](docs/FR1.png)                                                     |
+|     FR2     |  Yes   | ![FR2](docs/FR2.png)                                                     |
+|     FR3     |  Yes   | ![FR3](docs/FR3.png)                                                     |
+|     FR4     |  Yes   | [question loader](question_loader.py) and [question file](questions.csv) |
+|     FR5     |  Yes   | ![FR5](docs/FR5.png)                                                     |
+|     FR6     |  Yes   | ![FR6](docs/FR6.png)                                                     |
 
+A summary table for non-functional requirements
+|  ID   | Passed | Evidence                                                                                                                                                                                             |
+| :---: | :----: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NFR1  |  Yes   | Runs as a Tkinter program                                                                                                                                                                            |
+| NFR2  |  Yes   | Does not use any libraries outside of the standard Python library set which is supported on all devices                                                                                              |
+| NFR3  |  Yes   | Uses CSV files which are readable by any software                                                                                                                                                    |
+| NFR4  |  Yes   |                                                                                                                                                                                                      |
+| NFR5  |  Yes   | Error messages are documented above and use clear language. Internal error messages (upon question load fail) are not intended to be seen by the end user and are out of scope for this requirement. |
 
 ## Documentation
 ### User documentation
@@ -207,5 +234,7 @@ python -m unittest discover test
 All in all, the development of this project went well, with the main requirements achieved. The program code flow is simple to understand and object-oriented. The validation requirements are covered by unit tests as is the loading and parsing flow. 
 
 Whenever I have done Tkinter based projects in the past I have always done the screens using a Frame for each screen as it allows for all of the behaviour of a specific screen to be contained within the class. One class contains logic for only one screen which makes troubleshooting significantly easier. I have again done this here which helped the development process along.
+
+An issue that was identified late in the process was with the code used to calculate strongest and weakest categories, as this only works properly if each category has the same number of questions. In the future to resolve this, it should be calculated as a percentage correct in each category, however by the time this was noticed there was insufficient time to resolve this.
 
 In the future to expand the program, an idea would be to move towards a web based system. This would allow for the questions to be controlled centrally and would allow the results to be viewed from another system (provided appropriate authentication was used). I did experiment with [Streamlit](https://streamlit.io), however it did not quite meet the requirements for what I was trying to do. The ideal solution would be something utilising either [Flask](https://flask.palletsprojects.com), [Django](https://djangoproject.com) or [FastAPI](https://fastapi.tiangolo.com), however my limited knowledge of HTML/CSS would have made developing a properly functional frontend for these frameworks too much of a challenge at this stage.
