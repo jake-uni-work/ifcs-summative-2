@@ -59,8 +59,6 @@ The following software and libraries are used in the creation and operation of t
 ### Code Design
 Due to the nature of Tkinter as a framework, this project is heavily object-oriented. **Figure 3** shows the class diagram of the codebase. The [raw DrawIO file](docs/Class%20Diagram.drawio) is also available in the `docs/` folder.
 
-TODO: fix tk.Tk
-
 ![Figure 3: Class diagram](docs/Class%20Diagram.drawio.png)
 
 **Figure 3**
