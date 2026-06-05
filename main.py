@@ -1,7 +1,7 @@
 import tkinter as tk
+from tkinter import messagebox
 import sys
 from typing import Optional
-from datetime import datetime
 
 from constants import *
 from validation import *
@@ -19,6 +19,10 @@ class QuizApp(tk.Tk):
         self.score: int = 0
         self.scores: list[int] = []
         self.answers: list[str] = []
+        
+        # Cache the original exception handler so the error can still be printed to the console
+        self.original_report_callback_exception = self.report_callback_exception
+        self.report_callback_exception = self.handle_error
 
         self.config(bg=WINDOW_BG_COLOUR)
         self.minsize(WINDOW_MIN_WIDTH, WINDOW_MIN_HEIGHT)
@@ -60,7 +64,13 @@ class QuizApp(tk.Tk):
         else:
             for elem in self.winfo_children():
                 elem.destroy()
-
+                
+                
+    def handle_error(self, exc, val, tb):
+        self.original_report_callback_exception(exc, val, tb)
+        messagebox.showerror(title="Error", message=f"A fatal error has occurred, program will now exit:\n{exc.__name__}: {val}")
+        self.destroy()
+        
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
