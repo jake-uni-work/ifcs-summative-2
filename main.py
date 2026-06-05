@@ -11,6 +11,7 @@ import screens
 
 
 class QuizApp(tk.Tk):
+    """The root Quiz app. Contains state and functions for shifting the view"""
     def __init__(self, question_file_name: str = "questions.csv") -> None:
         super().__init__()
         self.name: Optional[str] = None
@@ -19,7 +20,7 @@ class QuizApp(tk.Tk):
         self.score: int = 0
         self.scores: list[int] = []
         self.answers: list[str] = []
-        
+
         # Cache the original exception handler so the error can still be printed to the console
         self.original_report_callback_exception = self.report_callback_exception
         self.report_callback_exception = self.handle_error
@@ -58,19 +59,22 @@ class QuizApp(tk.Tk):
         save_results("results.csv", self.name, self.answers)
 
     def clear_screen(self):
+        """Clears all elements from the screen."""
         if self.active_container:
             self.active_container.destroy()
             self.active_container = None
         else:
             for elem in self.winfo_children():
                 elem.destroy()
-                
-                
+
     def handle_error(self, exc, val, tb):
+        """Handles any uncaught exceptions thrown during Tkinter flows.
+
+        Shows an error message box and quits the program"""
         self.original_report_callback_exception(exc, val, tb)
         messagebox.showerror(title="Error", message=f"A fatal error has occurred, program will now exit:\n{exc.__name__}: {val}")
         self.destroy()
-        
+
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:

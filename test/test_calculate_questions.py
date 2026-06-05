@@ -1,6 +1,6 @@
 import unittest
 
-from screens.end import calculate_categories, determine_count, strongest_and_weakest_categories
+from category_calculation import determine_count, strongest_and_weakest_categories
 
 
 class CategoryCalcTest(unittest.TestCase):
