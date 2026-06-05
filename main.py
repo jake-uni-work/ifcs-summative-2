@@ -17,7 +17,6 @@ class QuizApp(tk.Tk):
         self.active_container: Optional[tk.Frame] = None
         self.questions: list[dict] = load_questions(question_file_name)
         self.score: int = 0
-        # TODO: store in a list instead
         self.scores: list[int] = []
         self.answers: list[str] = []
 
