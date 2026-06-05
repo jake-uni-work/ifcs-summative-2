@@ -15,17 +15,17 @@ This MVP focuses on essential functionality (displaying questions and providing 
 
 ## Design
 ### GUI Designs
-**Figure 1** shows the early protoype which was used during the initial design stage of the program. It represents the basic user journey from the starting screen, to a single question (as an example) to the finish screen highlighting the weak areas.
+**Figure 1** shows the early prototype which was used during the initial design stage of the program. It represents the basic user journey from the starting screen, to a single question (as an example) to the finish screen highlighting the weak areas.
 
 It contains some basic colour highlighting to showcase the idea clearly, however this is not intended to perfectly represent the end application.
 
-![Figure 1: Early prototype](docs/prototype_1.png)
+![Figure 1](docs/prototype_1.png)
 
 **Figure 1**
 
 **Figure 2** shows the journey related to planned validation requirements and error messages on the name input fields. These ensure that the user enters a valid name before proceeding to the questions
 
-![Figure 2: Validation requirements](docs/prototype_2.png)
+![Figure 2](docs/prototype_2.png)
 
 **Figure 2**
 ### Requirements
@@ -59,7 +59,7 @@ The following software and libraries are used in the creation and operation of t
 ### Code Design
 Due to the nature of Tkinter as a framework, this project is heavily object-oriented. **Figure 3** shows the class diagram of the codebase. The [raw DrawIO file](docs/Class%20Diagram.drawio) is also available in the `docs/` folder.
 
-![Figure 3: Class diagram](docs/Class%20Diagram.drawio.png)
+![Figure 3](docs/Class%20Diagram.drawio.png)
 
 **Figure 3**
 ## Development
@@ -162,6 +162,18 @@ At the completion of the final question the results are saved to a CSV file call
 
 These files are CSV files so can be viewed by standard spreadsheet software.
 
+### Calculating the categories
+On the end screen, the strongest and weakest categories are shown.
+
+The initial plan was to show strongest 3 and weakest 3 categories on the end screen, however it was quickly realised that this would need to be dynamic based on the total number of categories asked.
+
+- If there are under 2 categories, no summary is returned
+- If there are 2 or 3 categories, only the strongest and weakest is shown
+- If there are between 4 and 7 categories, the strongest and weakest 2 are shown
+- If there are 8 or more, the strongest and weakest 3 are shown.
+
+From there, the mapping of category to score is flattened into just a sorted list of categories based on score, and the correct number of elements are returned from each end.
+
 ## Testing
 Both automated and manual testing was used and performed throughout the development process.
 
@@ -229,10 +241,11 @@ python -m unittest discover test
 ```
 
 ## Evaluation
-All in all, the development of this project went well, with the main requirements achieved. The program code flow is simple to understand and object-oriented. The validation requirements are covered by unit tests as is the loading and parsing flow. 
+The development of this project went well, with the main requirements achieved. The validation requirements are covered by unit tests as is the loading and parsing flow. 
 
 Whenever I have done Tkinter based projects in the past I have always done the screens using a Frame for each screen as it allows for all of the behaviour of a specific screen to be contained within the class. One class contains logic for only one screen which makes troubleshooting significantly easier. I have again done this here which helped the development process along.
 
-An issue that was identified late in the process was with the code used to calculate strongest and weakest categories, as this only works properly if each category has the same number of questions. In the future to resolve this, it should be calculated as a percentage correct in each category, however by the time this was noticed there was insufficient time to resolve this.
+An issue that was identified late in the process was with the code used to calculate strongest and weakest categories, as this only works properly if each category has the same number of questions (for example, a category with only one question would always be weakest).
+In the future to resolve this, it should be calculated as a percentage correct in each category, however by the time this was noticed there was insufficient time remaining to resolve this issue.
 
 In the future to expand the program, an idea would be to move towards a web based system. This would allow for the questions to be controlled centrally and would allow the results to be viewed from another system (provided appropriate authentication was used). I did experiment with [Streamlit](https://streamlit.io), however it did not quite meet the requirements for what I was trying to do. The ideal solution would be something utilising either [Flask](https://flask.palletsprojects.com), [Django](https://djangoproject.com) or [FastAPI](https://fastapi.tiangolo.com), however my limited knowledge of HTML/CSS would have made developing a properly functional frontend for these frameworks too much of a challenge at this stage.

@@ -11,7 +11,11 @@ def determine_count(categories: int) -> int:
 
 
 def strongest_and_weakest_categories(score_by_category: dict[str, int]) -> tuple[list[str], list[str]]:
-    """Calculates the strongest and weakest categories using a dictionary of """
+    """Calculates the strongest and weakest categories using a dictionary of categories to scores.
+    
+    Returns a tuple of two lists, the first being the strongest categories and the second being the weakest categories.
+    
+    The number of categories returned is determined by the determine_count function."""
     count = determine_count(len(score_by_category))
 
     if count == 0:
