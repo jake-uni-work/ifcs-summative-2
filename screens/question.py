@@ -111,7 +111,7 @@ class QuestionView(tk.Frame):
             font=font(20),
             command=self.draw_next_question
         )
-        next_question_button.pack(pady=(0, 0))
+        next_question_button.pack(pady=(0, 0), side="bottom")
         
     def draw_next_question(self):
         """If this question is the last question, this will draw the end screen. Otherwise, it will draw the next question"""
