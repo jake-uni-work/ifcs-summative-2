@@ -26,7 +26,6 @@ def load_questions(file_name: str) -> list[dict]:
 
 def save_results(file_name: str, name: str, answers: list[str]):
     """Saves the results of a quiz to a CSV file, appending to the end of the file if it already exists"""
-    file_name = "results.csv"
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with open(file_name, 'a', newline="") as f:
         writer = csv.writer(f)
