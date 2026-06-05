@@ -66,7 +66,7 @@ Due to the nature of Tkinter as a framework, this project is heavily object-orie
 ### The different "states"
 There is a central (or "root") class `QuizApp` which defines the main window and holds most of the state. This class inherits `tk.Tk`.
 
-Each individual view is its own class inherting the `tk.Frame` class. This aids in splitting up the project into different classes for different functions so it becomes a lot clearer which view is responsible for which UI elements and the flow between them, and allows for the root class to only contain the necessary state and a few functions for shifting the view:
+Each individual view is its own class inheriting the `tk.Frame` class. This aids in splitting up the project into different classes for different functions so it becomes a lot clearer which view is responsible for which UI elements and the flow between them, and allows for the root class to only contain the necessary state and a few functions for shifting the view:
 ```py
 def draw_welcome_screen(self) -> None:
     """Clears the current view and displays the welcome screen"""
@@ -108,8 +108,8 @@ questions.append({
 
 ### Validation
 When a user enters their name at the start of the quiz, it must be validated to ensure it is a reasonable name. These rules are:
-* Must be between 2-50 characters. To achive this, the length is checked: `return 2 <= len(name) <= 50`
-* Must contain only letters, spaces, hyphens and apostraphes. To achieve this, a Regular Expression (Regex) is used to validate the provided name against a set of rules.
+* Must be between 2-50 characters. To achieve this, the length is checked: `return 2 <= len(name) <= 50`
+* Must contain only letters, spaces, hyphens and apostrophes. To achieve this, a Regular Expression (Regex) is used to validate the provided name against a set of rules.
   * The Regex in question is `^[a-zA-Z\-' ]+$`, which will check that the entire string matches the pattern.
     * `^` and `$` mean that the string must match the entire pattern.
     * `a-z` matches all lowercase letters
@@ -140,7 +140,7 @@ If the name contains invalid characters:
 elif not validate_name_characters(entered_name):
     messagebox.showerror(
         title="Error",
-        message="Name must contain only letters, spaces, hyphens, and apostraphes."
+        message="Name must contain only letters, spaces, hyphens, and apostrophes."
     )
 ```
 
@@ -160,7 +160,7 @@ This will then automatically adjust the text wrapping for the label so that it w
 ### Saving the results
 At the completion of the final question the results are saved to a CSV file called `results.csv`. It stores the players name, the time they completed the quiz, and the scores for each question. The results file does not currently store the per-category breakdown, this needs to be recalculated based on the question data. 
 
-These files are standared CSV files so can be viewed by standard spreadsheet software.
+These files are CSV files so can be viewed by standard spreadsheet software.
 
 ## Testing
 Both automated and manual testing was used and performed throughout the development process.

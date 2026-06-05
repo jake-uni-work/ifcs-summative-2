@@ -69,7 +69,7 @@ class WelcomeScreen(tk.Frame):
         elif not validate_name_characters(entered_name):
             messagebox.showerror(
                 title="Error",
-                message="Name must contain only letters, spaces, hyphens, and apostraphes."
+                message="Name must contain only letters, spaces, hyphens, and apostrophes."
             )
         else:
             self.parent.name = entered_name
